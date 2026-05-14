@@ -6,9 +6,12 @@ from levels.scene import Scene
 from managers import player_manager
 
 
+def draw_player_bars(screen, bar_width):
+    pygame.draw.rect(screen, BLUE_COLOR, pygame.Rect(0, 0, bar_width, SCREEN_HEIGHT))
+    pygame.draw.rect(screen, RED_COLOR, pygame.Rect(SCREEN_WIDTH - bar_width, 0, bar_width, SCREEN_HEIGHT))
+
 def draw_decks(screen, blue_deck, red_deck, start_y, y_offset):
     y = start_y
-    y_offset = 175
 
     for i in range(4):
         card_blue = blue_deck[i]
@@ -66,8 +69,6 @@ class Arena(Scene):
         self.blue_plr = player_manager.add_player("bleu", test_blue, 3)
 
         bar_width = 15
-        pygame.draw.rect(self.ui.screen, BLUE_COLOR, pygame.Rect(0, 0, bar_width, SCREEN_HEIGHT))
-        pygame.draw.rect(self.ui.screen, RED_COLOR, pygame.Rect(SCREEN_WIDTH - bar_width, 0, bar_width, SCREEN_HEIGHT))
 
         self.sound.clear_sounds()
         self.sound.play_sound("combat.mp3", 2500, True)
@@ -76,6 +77,7 @@ class Arena(Scene):
         super().run()
 
         self.ui.screen.blit(self.arena, self.arena_pos)
+        draw_player_bars(self.ui.screen, 15)
         draw_decks(self.ui.screen, self.blue_plr.deck_img, self.red_plr.deck_img, 150, 175)
         draw_elixir_bars(self.ui.screen,
                          self.elixir_bar,
