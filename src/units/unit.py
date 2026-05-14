@@ -2,6 +2,7 @@ import json
 import logging
 import os
 
+import constant
 from constant import DEFINITIONS_PATH
 from utils import log
 
@@ -21,7 +22,7 @@ class Unit:
             log.logger.send(f"Could not load unit {self.name}, file not found.", logging.ERROR)
             return
         else:
-            log.logger.send(f"Registered unit {self.name}.", logging.DEBUG)
+            log.logger.send(f"Registered unit {self.name}.", constant.TRACE)
 
         self.data = json.load(open(DEFINITIONS_PATH / self.file))
 

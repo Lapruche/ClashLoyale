@@ -1,17 +1,15 @@
-from core import asset
 from constant import SPRITES_PATH
+from core import asset
 from levels.scene import Scene
-from levels.widgets.button_with_tip_widget import ButtonWithTipWidget
 from levels.widgets.image_widget import ImageWidget
 from levels.widgets.text_widget import TextWidget
 
+
 class TestScreen(Scene):
     def __init__(self, modules: dict):
-        super().__init__
+        super().__init__(modules)
 
         # Module definitions
-        self.modules = modules
-        self.ui = self.modules["ui"]
 
     def start(self):
         super().start()

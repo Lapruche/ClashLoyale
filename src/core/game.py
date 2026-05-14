@@ -1,3 +1,4 @@
+import logging
 import os
 
 import pygame
@@ -8,9 +9,10 @@ from core.input import Input
 from core.sound import Sound
 from core.state import StateManager, GameState
 from core.ui import UI
+from levels.arena import Arena
+from levels.choose_deck_screen import ChooseDeckScreen
 from levels.main_menu import MainMenu
 from levels.test_screen import TestScreen
-from levels.choose_deck_screen import ChooseDeckScreen
 from units.unit import Unit
 from utils import log
 
@@ -34,12 +36,17 @@ class Game:
         self.test_screen = TestScreen(self.modules)
         self.modules["state"].screens[GameState.TEST] = self.test_screen
 
+        self.arena_scene = Arena(self.modules)
+        self.modules["state"].screens[GameState.GAME] = self.arena_scene
+
         self.registered_units = []
 
         for definition in os.listdir(DEFINITIONS_PATH):
             if definition.endswith(".json"):
                 unit = Unit(definition)
                 self.registered_units.append(unit)
+
+        log.logger.send(f"Registered {len(self.registered_units)} units", logging.DEBUG)
 
         # Add screens here with state definitions
         # Example: self.test_menu = TestMenu(self.modules, ...)

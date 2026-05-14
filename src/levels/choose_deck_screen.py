@@ -1,15 +1,14 @@
-import constant
-import pygame
 import os
-import logging
 
-from core.state import GameState
-from utils import tracked_surface
+import pygame
+
+import constant
 from core import asset
-from utils import log
-from levels.widgets.button_widget import ButtonWidget
+from core.state import GameState
 from levels.scene import Scene
-
+from levels.widgets.button_widget import ButtonWidget
+from utils import tracked_surface
+from utils.scale_card import scale_card
 
 deck_blue_selection=[]
 
@@ -29,9 +28,9 @@ class ChooseDeckScreen(Scene):
 
         for file in os.listdir(constant.CARDS_PATH):
             if file.endswith(".png"):
-                image = asset.get_image(constant.CARDS_PATH / file).convert_alpha()
-                image = pygame.transform.scale(image, (constant.SCREEN_WIDTH / 10.5, constant.SCREEN_HEIGHT / 9))
-                self.cartes.append(tracked_surface.TrackedSurface(file,image))
+                card = asset.get_image(constant.CARDS_PATH / file).convert_alpha()
+                card = scale_card(card, 10.5, 9)
+                self.cartes.append(tracked_surface.TrackedSurface(file, card))
     
 
     def start(self):
@@ -45,7 +44,7 @@ class ChooseDeckScreen(Scene):
                 self.modules,
                 (self.screen.get_width() / 1.5, self.screen.get_width() / 1.2),
                 self.ready_image,
-                lambda _: self.state_manager.set_state(GameState.MENU)
+                lambda _: self.state_manager.set_state(GameState.GAME)
             )
         ]
 
@@ -74,7 +73,7 @@ class ChooseDeckScreen(Scene):
         self.blue_choose_deck = pygame.transform.scale(self.blue_choose_deck, (constant.SCREEN_WIDTH/1.6, constant.SCREEN_HEIGHT/28))
         self.ui.screen.blit(self.blue_choose_deck,(85,80))
 
-    def full_deck():
+    def full_deck(self):
         return len(deck_blue_selection) == 8
 
 
