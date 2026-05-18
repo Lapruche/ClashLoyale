@@ -24,7 +24,7 @@ class Game:
             "state": StateManager(GameState.STARTING),
             "ui": UI(),
             "input": Input(),
-            "sound": Sound(16)  # 16 Channels
+            "sound": Sound(32)  # 32 Channels
         }
 
         self.main_menu = MainMenu(self.modules)

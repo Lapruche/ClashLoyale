@@ -61,10 +61,11 @@ class Sound:
             return None
         return self.channels[index]
 
-    def play_sound(self, path: Path, fade_in: int, looped: bool = False) -> int:
+    def play_sound(self, path: Path, volume: float = 1, fade_in: int = 0, looped: bool = False) -> int:
         """
         Plays a given sound.
         
+        :param volume: Volume of the sound.
         :param path: Path where the sound is stored.
         :param fade_in: Fade in time in milliseconds of the sound.
         :param looped: Whether the sound should be looped or not.
@@ -85,6 +86,7 @@ class Sound:
             log.logger.send(f"Could not play sound from {path}, there is no channel available.", logging.ERROR)
             return -1
 
+        channel.set_volume(volume)
         channel.play(sound, loops, 0, fade_in)
         log.logger.send(f"Playing {path}.", logging.DEBUG)
 

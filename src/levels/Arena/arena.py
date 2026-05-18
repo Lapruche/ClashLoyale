@@ -4,7 +4,7 @@ import pygame
 
 from constant import GUI_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH, TRACE
 from core import asset
-from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars
+from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars, taunt
 from levels.scene import Scene
 from managers import player_manager
 from utils import log
@@ -60,11 +60,15 @@ class Arena(Scene):
         self.card_images = load_card_images(cards)
 
         self.sound.clear_sounds()
-        self.sound.play_sound("combat.mp3", 2500, True)
-
+        self.sound.play_sound("combat.mp3", 0.75, 2500, True)
+        
         # Game actions are temporarily bound here.
-        self.input.bind_action("player_1", pygame.K_SPACE, lambda: self.blue_plr.play_card(0))
-        self.input.bind_action("player_2", pygame.K_RSHIFT, lambda: self.red_plr.play_card(0))
+        self.input.bind_action("player_1", pygame.K_SPACE, lambda: self.blue_plr.play_card(self.sound, 0))
+        self.input.bind_action("player_2", pygame.K_RSHIFT, lambda: self.red_plr.play_card(self.sound, 0))
+
+        # Taunt
+        self.input.bind_action("player_1", pygame.K_e, lambda: taunt(self.ui.screen, self.sound, "bleu"))
+        self.input.bind_action("player_2", pygame.K_EXCLAIM, lambda: taunt(self.ui.screen, self.sound, "rouge"))
 
     def run(self) -> None:
         super().run()
@@ -72,7 +76,7 @@ class Arena(Scene):
         self.ui.screen.blit(self.arena, self.arena_pos)
         draw_player_bars(self.ui.screen, 15)
         draw_decks(self.ui.screen, self.blue_plr, self.red_plr, self.card_images, 150, 175)
-        draw_elixir_bars(self.ui.screen,
+        draw_elixir_bars(self.ui,
                          self.elixir_bar,
                          SCREEN_WIDTH / 2 - self.arena_size[0] / 2 - 40,
                          SCREEN_WIDTH / 2 + self.arena_size[0] / 2 + 20,

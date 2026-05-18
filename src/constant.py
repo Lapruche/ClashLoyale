@@ -4,6 +4,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 SOUNDS_PATH = BASE_DIR / "sounds"
+GUI_SOUNDS_PATH = SOUNDS_PATH / "gui"
 MUSIC_THEMES_PATH = SOUNDS_PATH / "themes"
 SPRITES_PATH = BASE_DIR / "sprites"
 CARDS_PATH = SPRITES_PATH / "cartes"
@@ -17,7 +18,7 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 1000
 
 BLUE_COLOR = "#0099FF"
-RED_COLOR = "#FF5500"
+RED_COLOR = "#FF2200"
 ELIXIR_COLOR = "#CC00BB"
 
 CARD_OFFSET_Y = 10

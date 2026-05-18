@@ -2,7 +2,8 @@
 import logging
 from random import shuffle
 
-from constant import TRACE
+from constant import TRACE, GUI_SOUNDS_PATH
+from core.sound import Sound
 from utils import log
 
 
@@ -27,11 +28,13 @@ class Player:
         self.hand = game_deck[:4]
         self.draw_pile = game_deck[4:]
 
-    def play_card(self, index):
+    def play_card(self, sound_module: Sound, index):
         card = self.hand[index]
         next_card = self.draw_pile.pop(0)
 
         self.hand[index] = next_card
         self.draw_pile.append(card)
+        
+        sound_module.play_sound(GUI_SOUNDS_PATH / "elixir.wav", 0.3)
 
         log.logger.send(f"Player {self.camp} plays card {card}.", logging.DEBUG)
