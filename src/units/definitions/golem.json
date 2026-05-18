@@ -6,12 +6,12 @@
   "freq_atk": 1,
   "speed": 1,
   "type": "rusheur",
-  "range":1,
+  "range": 1,
   "self_destruct": 0,
   "nb_unit": 1,
   "shield": "None",
   "target": "unique",
-  "radius":"None",
+  "radius": "None",
   "spawn_unit": [
     "min_golem",
     "min_golem"
@@ -20,7 +20,4 @@
     "recoil": 3,
     "resist-recoil": 2
   }
-
-
-
 }

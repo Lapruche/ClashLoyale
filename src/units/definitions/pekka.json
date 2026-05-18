@@ -6,16 +6,15 @@
   "freq_atk": 2,
   "speed": 1,
   "type": "unit",
-  "range":1,
+  "range": 1,
   "self_destruct": 0,
   "nb_unit": 1,
   "shield": "None",
   "tower_damage": 600,
   "target": "unique",
-  "radius":"None",
-  "spawn_unit":"None",
+  "radius": "None",
+  "spawn_unit": "None",
   "effect": {
     "resist_recoil": 2
   }
-
 }

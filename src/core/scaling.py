@@ -1,6 +1,8 @@
 import pygame
+
 import constant
 from utils import log
+
 
 def auto_scaling():
     """
@@ -13,8 +15,7 @@ def auto_scaling():
     base_w = constant.SCREEN_WIDTH
     base_h = constant.SCREEN_HEIGHT
 
-    log.logger.send("Size of the window")
-    log.logger.send(f"{screen_w}x{screen_h}")
+    log.logger.send(f"Size of the window {screen_w}x{screen_h}", constant.TRACE)
 
     scale_w = screen_w / base_w
     scale_h = screen_h / base_h

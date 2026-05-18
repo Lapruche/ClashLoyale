@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from constant import LOG_COLORS, LOG_COLORS_RESET
+from constant import LOG_COLORS_RESET, LOG_COLORS
 
 logger = None
 
@@ -19,6 +19,8 @@ class Logger:
 
         self.log_file = log_file
         self.severity_threshold = severity_threshold
+
+        logging.addLevelName(5, "TRACE")  # Adds a TRACE level before initializing logger
 
         self.logger = logging.getLogger(f"{__name__}.Logger")
         self.logger.setLevel(self.severity_threshold)
