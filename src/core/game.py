@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    game.py                                            :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: alexis_marechal <michalex37@proton.me>     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/05/18 22:58:43 by alexis_marech     #+#    #+#              #
+#    Updated: 2026/05/19 00:02:25 by alexis_marech    ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 import logging
 import os
 
@@ -53,8 +65,8 @@ class Game:
         #          self.state.screens[GameState.TEST] = self.test_menu
         # For more info on how to create a scene, see test_screen.py
 
-        self.modules["state"].set_state(GameState.MENU)
         log.logger.send("Initialized game")
+        self.modules["state"].set_state(GameState.MENU)
 
     def tick(self, events: list[Event], dt):
         self.modules["input"].process(events)
@@ -65,3 +77,5 @@ class Game:
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
+
+
