@@ -1,15 +1,17 @@
 import logging
 import sys
 import traceback
+
 import pygame
 
+import constant
 from core.game import Game
-from units.unit import Unit
-from utils import log
 from core.scaling import auto_scaling
+from utils import log
+
 
 def run():
-    log.Logger('debug.log', logging.DEBUG)  # Will directly populate the logger variable
+    log.Logger('debug.log', constant.TRACE)  # Will directly populate the logger variable
 
     # Pygame init
     pygame.init()

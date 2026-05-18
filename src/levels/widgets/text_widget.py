@@ -2,7 +2,8 @@ import pygame.font
 
 
 class TextWidget:
-    def __init__(self, modules: dict, text: str, font: pygame.font.Font, pos: tuple, color: tuple = (255, 255, 255), id: str | None = None):
+    def __init__(self, modules: dict, text: str, font: pygame.font.Font, pos: tuple, color: tuple = (255, 255, 255),
+                 id: str | None = None):
         # Module definitions
         self.screen = modules["ui"].screen
         self.font = font

@@ -1,5 +1,3 @@
-import pygame
-
 ONCE = 0
 
 
