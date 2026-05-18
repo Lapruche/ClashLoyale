@@ -1,4 +1,4 @@
-from typing import Any,Callable
+from typing import Any, Callable
 
 import pygame
 
@@ -22,7 +22,8 @@ class ButtonWithTipWidget:
         self.text_color = text_color
         self.id = id
 
-        self.button = ButtonWidget(modules, pos, self.button_image, action, id) # ButtonWidget will inherit the objects id
+        self.button = ButtonWidget(modules, pos, self.button_image, action,
+                                   id)  # ButtonWidget will inherit the objects id
         text_pos = (
             self.pos[0] + self.button_image.get_width() + 10,
             self.pos[1] - self.font.get_height() / 2 + self.button_image.get_height() / 2

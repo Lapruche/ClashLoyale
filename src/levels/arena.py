@@ -10,6 +10,7 @@ def draw_player_bars(screen, bar_width):
     pygame.draw.rect(screen, BLUE_COLOR, pygame.Rect(0, 0, bar_width, SCREEN_HEIGHT))
     pygame.draw.rect(screen, RED_COLOR, pygame.Rect(SCREEN_WIDTH - bar_width, 0, bar_width, SCREEN_HEIGHT))
 
+
 def draw_decks(screen, blue_deck, red_deck, start_y, y_offset):
     y = start_y
 

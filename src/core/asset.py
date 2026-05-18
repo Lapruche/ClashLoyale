@@ -95,7 +95,7 @@ def get_font(path: Path, size: int) -> pygame.font.Font:
     trunc_path = path.stem
     index = f"{path}{size}"
 
-    if path not in __fonts.keys():    
+    if path not in __fonts.keys():
         try:
             font = pygame.font.Font(path, size)
         except pygame.error:

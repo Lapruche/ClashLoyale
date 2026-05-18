@@ -25,4 +25,3 @@ class Unit:
             log.logger.send(f"Registered unit {self.name}.", constant.TRACE)
 
         self.data = json.load(open(DEFINITIONS_PATH / self.file))
-

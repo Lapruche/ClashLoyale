@@ -20,18 +20,17 @@ class TestScreen(Scene):
                 "TextWidget",
                 self.ui.font_small,
                 (50, 50)
-            ), # TODO: Add other modules as test
+            ),  # TODO: Add other modules as test
             ImageWidget(
                 self.modules,
-                (100,100),
+                (100, 100),
                 asset.get_image(SPRITES_PATH / "arena.png"),
                 id="ImageWidgetTest"
             )
         ]
-        
+
         for component in components:
             self.ui.add_component(component)
 
     def run(self):
         super().run()
-        

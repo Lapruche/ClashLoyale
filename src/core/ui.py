@@ -35,7 +35,7 @@ class UI:
         self.components = []
 
     def render(self):
-        #self.screen.fill(constant.BACKGROUND_COLOR)
+        # self.screen.fill(constant.BACKGROUND_COLOR)
         for component in self.components:
             component.render()
 
