@@ -1,44 +1,30 @@
+from typing import Any, Collection
+
 import pygame
 
-from constant import BLUE_COLOR, ELIXIR_COLOR, GUI_PATH, RED_COLOR, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH
+from constant import GUI_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH, TRACE
 from core import asset
+from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars
 from levels.scene import Scene
 from managers import player_manager
+from utils import log
+from utils.scale_card import scale_card
 
 
-def draw_player_bars(screen, bar_width):
-    pygame.draw.rect(screen, BLUE_COLOR, pygame.Rect(0, 0, bar_width, SCREEN_HEIGHT))
-    pygame.draw.rect(screen, RED_COLOR, pygame.Rect(SCREEN_WIDTH - bar_width, 0, bar_width, SCREEN_HEIGHT))
+def load_card_images(cards: Collection[str]) -> dict[Any, Any]:
+    images = {}
 
+    for card in cards:
+        card_img = asset.get_image_stem(card)
+        if card_img:
+            images[card] = scale_card(card_img, 8, 6.5)
 
-def draw_decks(screen, blue_deck, red_deck, start_y, y_offset):
-    y = start_y
-
-    for i in range(4):
-        card_blue = blue_deck[i]
-        card_red = red_deck[i]
-
-        screen.blit(card_blue, (50, y))
-        screen.blit(card_red, (SCREEN_HEIGHT - 175, y))
-
-        y += y_offset
-
-
-def draw_elixir_bars(screen, elixir_bar, blue_x, red_x, y_offset):
-    blue_elixir = player_manager.get_player("bleu").elixir
-    red_elixir = player_manager.get_player("rouge").elixir
-
-    bar_size = elixir_bar.get_size()
-
-    pygame.draw.rect(screen, ELIXIR_COLOR, pygame.Rect(blue_x, y_offset, bar_size[0], bar_size[1] / 10 * blue_elixir))
-    pygame.draw.rect(screen, ELIXIR_COLOR, pygame.Rect(red_x, y_offset, bar_size[0], bar_size[1] / 10 * red_elixir))
-
-    screen.blit(elixir_bar, (blue_x, y_offset))  # Blue elixir bar
-    screen.blit(elixir_bar, (red_x, y_offset))  # Red elixir bar   
+    log.logger.send(f"Loaded and scaled {len(cards)} card images.", TRACE)
+    return images
 
 
 class Arena(Scene):
-    def __init__(self, modules: dict):
+    def __init__(self, modules: dict) -> None:
         super().__init__(modules)  # Initializes the scene
 
         self.modules = modules
@@ -59,8 +45,9 @@ class Arena(Scene):
 
         self.blue_plr = None
         self.red_plr = None
+        self.card_images = None
 
-    def start(self):
+    def start(self) -> None:
         super().start()
 
         test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'sapeur', 'zap', 'zappy']
@@ -69,17 +56,22 @@ class Arena(Scene):
         self.red_plr = player_manager.add_player("rouge", test_red, 3)
         self.blue_plr = player_manager.add_player("bleu", test_blue, 3)
 
-        bar_width = 15
+        cards = set(self.blue_plr.deck + self.red_plr.deck)  # Aggregation of both decks to load and scale all images
+        self.card_images = load_card_images(cards)
 
         self.sound.clear_sounds()
         self.sound.play_sound("combat.mp3", 2500, True)
 
-    def run(self):
+        # Game actions are temporarily bound here.
+        self.input.bind_action("player_1", pygame.K_SPACE, lambda: self.blue_plr.play_card(0))
+        self.input.bind_action("player_2", pygame.K_RSHIFT, lambda: self.red_plr.play_card(0))
+
+    def run(self) -> None:
         super().run()
 
         self.ui.screen.blit(self.arena, self.arena_pos)
         draw_player_bars(self.ui.screen, 15)
-        draw_decks(self.ui.screen, self.blue_plr.deck_img, self.red_plr.deck_img, 150, 175)
+        draw_decks(self.ui.screen, self.blue_plr, self.red_plr, self.card_images, 150, 175)
         draw_elixir_bars(self.ui.screen,
                          self.elixir_bar,
                          SCREEN_WIDTH / 2 - self.arena_size[0] / 2 - 40,

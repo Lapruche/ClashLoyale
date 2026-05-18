@@ -9,7 +9,7 @@ from core.input import Input
 from core.sound import Sound
 from core.state import StateManager, GameState
 from core.ui import UI
-from levels.arena import Arena
+from levels.Arena.arena import Arena
 from levels.choose_deck_screen import ChooseDeckScreen
 from levels.main_menu import MainMenu
 from levels.test_screen import TestScreen
