@@ -1,7 +1,7 @@
 {
   "name": "min_golem",
   "elixir_cost": 0,
-  "pv": 700,
+  "pv": 1000,
   "damage": 400,
   "freq_atk": 1,
   "speed": 1.5,

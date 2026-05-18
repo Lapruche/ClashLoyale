@@ -1,8 +1,8 @@
 {
   "name": "zappy",
   "elixir_cost": 6,
-  "pv": 1200,
-  "damage": 800,
+  "pv": 1800,
+  "damage": 1200,
   "freq_atk": 1,
   "speed": 1,
   "type": "unit",
@@ -14,7 +14,7 @@
   "radius": "1",
   "spawn_unit": "None",
   "effect": {
-    "loging-hit": 3,
+    "loging_hit": 3,
     "hit_recoil": 1
   }
 }

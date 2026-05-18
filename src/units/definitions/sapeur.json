@@ -1,8 +1,8 @@
 {
   "name": "sapeur",
   "elixir_cost": 2,
-  "pv": 200,
-  "damage": 300,
+  "pv": 330,
+  "damage": 500,
   "freq_atk": 1,
   "speed": 3,
   "type": "rusheur",

@@ -2,7 +2,7 @@
   "name": "fire_spirit",
   "elixir_cost": 1,
   "pv": 100,
-  "damage": "80",
+  "damage": 80,
   "freq_atk": 1,
   "speed": 3,
   "type": "unit",
