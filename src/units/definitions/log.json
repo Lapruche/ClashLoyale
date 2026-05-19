@@ -2,7 +2,7 @@
   "name": "log",
   "elixir_cost": 2,
   "pv": "None",
-  "damage": 80,
+  "damage": 120,
   "freq_atk": "None",
   "speed": "None",
   "type": "spell",

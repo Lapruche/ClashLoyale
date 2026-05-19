@@ -1,0 +1,20 @@
+{
+  "name": "king_tower",
+  "elixir_cost": 0,
+  "pv": 7000,
+  "damage": 140,
+  "freq_atk": 2,
+  "speed":"None",
+  "type": "infra",
+  "range":10,
+  "self_destruct": 0,
+  "nb_unit": 1,
+  "shield": "None",
+  "tower_damage": "None",
+  "target": "unique",
+  "radius":"None",
+  "spawn_unit":"None",
+  "effect": {
+    "resist_recoil": 4
+  }
+}

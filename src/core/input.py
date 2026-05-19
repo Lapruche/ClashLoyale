@@ -17,6 +17,33 @@ def pass_f_c(device):  # Placeholder controller function
 
 class Input:
     def __init__(self):
+        self.keymap_p1 = {
+            pygame.K_q: pass_f,
+            pygame.K_d: pass_f,
+            pygame.K_z: pass_f,
+            pygame.K_s: pass_f,
+            pygame.K_SPACE: pass_f,  # Use
+            pygame.K_e: pass_f,  # Taunt
+        }
+
+        self.keymap_p2 = {
+            pygame.K_LEFT: pass_f,
+            pygame.K_RIGHT: pass_f,
+            pygame.K_UP: pass_f,
+            pygame.K_DOWN: pass_f,
+            pygame.K_RSHIFT: pass_f,  # Use
+            pygame.K_EXCLAIM: pass_f,  # Taunt
+        }
+
+        self.controller_keymap = {
+            13: pass_f_c,  # Left
+            14: pass_f_c,  # Right
+            11: pass_f_c,  # Up
+            12: pass_f_c,  # Down
+            0: pass_f_c,  # Use
+            3: pass_f_c  # Taunt
+        }
+
         self.controllers = {}
         self.keymaps = {  # TODO: Use semantic action names instead (ex: "use", "taunt", "forward")
             'player_1': {
