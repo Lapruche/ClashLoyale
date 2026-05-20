@@ -3,7 +3,7 @@ import pygame
 from constant import BLUE_COLOR, ELIXIR_COLOR, GUI_PATH, RED_COLOR, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH
 from core import asset
 from levels.scene import Scene
-from managers import player_manager
+from managers import player_manager, round_manager
 
 
 def draw_player_bars(screen, bar_width):
@@ -62,6 +62,7 @@ class Arena(Scene):
 
     def start(self):
         super().start()
+        round_manager.add_round(175)
 
         test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'sapeur', 'zap', 'zappy']
         test_blue = ['canon', 'mini_pekka', 'rage', 'fireball', 'dart_goblin', 'giant', 'hogrider', 'log']
