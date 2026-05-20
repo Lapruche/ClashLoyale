@@ -35,7 +35,7 @@ class MainMenu(Scene):
         for component in components:
             self.ui.add_component(component)
 
-        self.sound.play_sound("deck.mp3", 2500, True)
+        self.sound.play_sound("deck.mp3", 0.75, 2500, True)
 
     def run(self):
         super().run()

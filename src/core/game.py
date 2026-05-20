@@ -9,7 +9,7 @@ from core.input import Input
 from core.sound import Sound
 from core.state import StateManager, GameState
 from core.ui import UI
-from levels.arena import Arena
+from levels.Arena.arena import Arena
 from levels.choose_deck_screen import ChooseDeckScreen
 from levels.main_menu import MainMenu
 from levels.test_screen import TestScreen
@@ -25,7 +25,7 @@ class Game:
             "state": StateManager(GameState.STARTING),
             "ui": UI(),
             "input": Input(),
-            "sound": Sound(16)  # 16 Channels
+            "sound": Sound(32)  # 32 Channels
         }
 
         self.main_menu = MainMenu(self.modules)
