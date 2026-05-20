@@ -8,7 +8,9 @@ from utils import log
 
 
 class Player:
-    def __init__(self, camp, deck, elixir_start) -> None:
+    def __init__(self, keymap_context, cursor, camp, deck, elixir_start) -> None:
+        self.keymap_context = keymap_context
+        self.cursor = cursor
         self.camp = camp
         self.deck = deck  # 8 Cards
         self.elixir = elixir_start  # 0 - 10

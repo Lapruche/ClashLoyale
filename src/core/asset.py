@@ -143,7 +143,7 @@ def get_sound(path: Path) -> pygame.mixer.Sound:
 
     trunc_path = path.stem
 
-    if path not in __sounds.keys():
+    if trunc_path not in __sounds.keys():
         try:
             sound = pygame.mixer.Sound(path)
         except pygame.error:

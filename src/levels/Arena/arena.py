@@ -4,10 +4,13 @@ import pygame
 
 from constant import GUI_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH, TRACE
 from core import asset
-from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars, taunt
+from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars
+from levels.Arena.card_placement import CardPlacementHandler
 from levels.scene import Scene
-from managers import player_manager
+from managers import player_manager, cursor_manager
 from utils import log
+from utils.binding_states import bind_default_actions
+from utils.log import Logger
 from utils.scale_card import scale_card
 
 
@@ -49,26 +52,28 @@ class Arena(Scene):
 
     def start(self) -> None:
         super().start()
+        
+        log.logger.send("Game started.")
 
         test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'sapeur', 'zap', 'zappy']
         test_blue = ['canon', 'mini_pekka', 'rage', 'fireball', 'dart_goblin', 'giant', 'hogrider', 'log']
 
-        self.red_plr = player_manager.add_player("rouge", test_red, 3)
-        self.blue_plr = player_manager.add_player("bleu", test_blue, 3)
+        cursor_manager.init_arena_cursors()
+        blue_cursor = cursor_manager.get_cursor("bleu")
+        red_cursor = cursor_manager.get_cursor("rouge")
+
+        self.blue_plr = player_manager.add_player("player_1", blue_cursor, "bleu", test_blue, 3)
+        self.red_plr = player_manager.add_player("player_2", red_cursor, "rouge", test_red, 3)
 
         cards = set(self.blue_plr.deck + self.red_plr.deck)  # Aggregation of both decks to load and scale all images
         self.card_images = load_card_images(cards)
 
         self.sound.clear_sounds()
         self.sound.play_sound("combat.mp3", 0.75, 2500, True)
-        
-        # Game actions are temporarily bound here.
-        self.input.bind_action("player_1", pygame.K_SPACE, lambda: self.blue_plr.play_card(self.sound, 0))
-        self.input.bind_action("player_2", pygame.K_RSHIFT, lambda: self.red_plr.play_card(self.sound, 0))
 
-        # Taunt
-        self.input.bind_action("player_1", pygame.K_e, lambda: taunt(self.ui.screen, self.sound, "bleu"))
-        self.input.bind_action("player_2", pygame.K_EXCLAIM, lambda: taunt(self.ui.screen, self.sound, "rouge"))
+        card_placement = CardPlacementHandler(self.modules)
+        bind_default_actions(self.red_plr, self.modules)
+        bind_default_actions(self.blue_plr, self.modules)
 
     def run(self) -> None:
         super().run()

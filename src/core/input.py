@@ -1,4 +1,5 @@
 import logging
+from typing import Callable
 
 import pygame
 from pygame.event import Event
@@ -18,31 +19,33 @@ def pass_f_c(device):  # Placeholder controller function
 class Input:
     def __init__(self):
         self.controllers = {}
-        self.keymaps = {  # TODO: Use semantic action names instead (ex: "use", "taunt", "forward")
-            'player_1': {
-                pygame.K_q: pass_f,
-                pygame.K_d: pass_f,
-                pygame.K_z: pass_f,
-                pygame.K_s: pass_f,
-                pygame.K_SPACE: pass_f,  # Use
-                pygame.K_e: pass_f,  # Taunt
+        self.keymaps = {
+            "player_1": {
+                pygame.K_q: "left",
+                pygame.K_d: "right",
+                pygame.K_z: "up",
+                pygame.K_s: "down",
+                pygame.K_SPACE: "use",
+                pygame.K_e: "taunt",
             },
-            'player_2': {
-                pygame.K_LEFT: pass_f,
-                pygame.K_RIGHT: pass_f,
-                pygame.K_UP: pass_f,
-                pygame.K_DOWN: pass_f,
-                pygame.K_RSHIFT: pass_f,  # Use
-                pygame.K_EXCLAIM: pass_f,  # Taunt
+            "player_2": {
+                pygame.K_LEFT: "left",
+                pygame.K_RIGHT: "right",
+                pygame.K_UP: "up",
+                pygame.K_DOWN: "down",
+                pygame.K_RSHIFT: "use",
+                pygame.K_EXCLAIM: "taunt",
             },
-            'controller': {  # 
-                13: pass_f_c,  # Left
-                14: pass_f_c,  # Right
-                11: pass_f_c,  # Up
-                12: pass_f_c,  # Down
-                0: pass_f_c,  # Use
-                3: pass_f_c  # Taunt
-            }
+        }
+
+        self.action_bindings = {
+            "player_1": {},
+            "player_2": {},
+        }
+
+        self.keymap_camps = {
+            'rouge': self.keymaps['player_1'],
+            'bleu': self.keymaps['player_2'],
         }
 
         pygame.joystick.init()
@@ -65,26 +68,33 @@ class Input:
         self.controllers.pop(joy_id, pass_f)
         log.logger.send(f"Removed controller id {joy_id}")
 
-    def bind_action(self, keymap, key, action=pass_f):
-        if keymap not in self.keymaps.keys():
-            log.logger.send(f"Tried accessing a non-existent keymap [{keymap}].", logging.ERROR)
+    def bind_action(self, context: str, action_name: str, callback: Callable[[], None] = pass_f):
+        """
+
+        :param context: Context keymap to use
+        :param action_name: Semantic action name to bind to
+        :param callback: 
+        :return: 
+        """
+        if context not in self.action_bindings:
+            log.logger.send(f"Tried accessing a non-existent context [{context}].", logging.ERROR)
             return
 
-        registered_keymap = self.keymaps[keymap]
+        self.action_bindings[context][action_name] = callback
 
-        if key not in registered_keymap.keys():
-            log.logger.send(f"Tried binding a non-existent key ({key}).", logging.ERROR)
-            return
+        log.logger.send(f"Bound callback for action {action_name} of {context}.", TRACE)
 
-        registered_keymap[key] = action
-        log.logger.send(f"Bound action to key {key}.", TRACE)
 
-    def run_action(self, keymap, key, *args):
-        action = self.keymaps.get(keymap, {}).get(key)
-        if action is None:
+    def run_action(self, context, key, *args):
+        action_name = self.keymaps.get(context, {}).get(key)
+        if action_name is None:
             return False
 
-        action(*args)
+        callback = self.action_bindings.get(context, {}).get(action_name)
+        if callback is None:
+            return False
+
+        callback(*args)
         return True
 
     def process(self, events: list[Event]):
@@ -99,4 +109,5 @@ class Input:
                 case pygame.JOYBUTTONDOWN:
                     controller = self.controllers.get(event.instance_id)
                     if controller:
-                        self.run_action('controller', event.button, controller)
+                        #TODO self.run_action('controller', event.button, controller)
+                        pass

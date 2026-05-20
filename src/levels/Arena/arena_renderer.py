@@ -1,9 +1,12 @@
+import logging
+
 import pygame
 
-from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH
+from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH, GUI_PATH
 from core.sound import Sound
 from core.ui import UI
 from managers import player_manager
+from utils import log
 
 
 def draw_player_bars(screen, bar_width):
@@ -42,6 +45,20 @@ def draw_elixir_bars(ui_module: UI, elixir_bar, blue_x, red_x, y_offset):
     screen.blit(red_text, (red_x, y_offset - 50))
     screen.blit(elixir_bar, (blue_x, y_offset))  # Blue elixir bar
     screen.blit(elixir_bar, (red_x, y_offset))  # Red elixir bar
+
+
+def draw_cursors(ui_module: UI):
+    red_cursor = cursor.get_cursor("rouge")
+    bleu_cursor = cursor.get_cursor("bleu")
+
+    if red_cursor is None or bleu_cursor is None:
+        log.logger.send("Tried drawing non-existent cursor. Please make sure to initialize them first.", logging.ERROR)
+        return
+
+    if red_cursor.placing:
+        ui_module.screen.blit(GUI_PATH / "red_cursor.png", red_cursor.pos)
+    if bleu_cursor.placing:
+        ui_module.screen.blit(GUI_PATH / "blue_cursor.png", bleu_cursor.pos)
 
 
 def taunt(screen, sound_module: Sound, camp):
