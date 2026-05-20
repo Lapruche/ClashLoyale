@@ -3,7 +3,6 @@ import logging
 from utils import log
 
 class Cursor:
-
     def __init__(self,team):#camp=blue or red
         self.x=0
         self.y=0

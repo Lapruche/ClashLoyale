@@ -6,7 +6,7 @@ from constant import GUI_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH, TRACE,
 from core import asset
 from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars, draw_cursors
 from levels.scene import Scene
-from managers import player_manager, cursor_manager
+from managers import player_manager, cursor_manager, round_manager
 from utils import log
 from utils.binding_states import BindingsHelper
 from utils.drawing import scale_surface
@@ -53,7 +53,7 @@ class Arena(Scene):
 
     def start(self) -> None:
         super().start()
-
+        round_manager.add_round(175)
         log.logger.send("Game started.")
 
         test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'sapeur', 'zap', 'zappy']
