@@ -8,7 +8,7 @@ from core.state import GameState
 from levels.scene import Scene
 from levels.widgets.button_widget import ButtonWidget
 from utils import tracked_surface
-from utils.scale_card import scale_card
+from utils.drawing import scale_surface
 
 deck_blue_selection = []
 
@@ -30,7 +30,7 @@ class ChooseDeckScreen(Scene):
         for file in os.listdir(constant.CARDS_PATH):
             if file.endswith(".png"):
                 card = asset.get_image(constant.CARDS_PATH / file).convert_alpha()
-                card = scale_card(card, 10.5, 9)
+                card = scale_surface(card, 10.5, 9)
                 self.cartes.append(tracked_surface.TrackedSurface(file, card))
 
     def start(self):

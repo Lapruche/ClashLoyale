@@ -1,11 +1,14 @@
 import logging
+from typing import Self
 
 import pygame
 
 from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH, GUI_PATH
 from core.sound import Sound
 from core.ui import UI
-from managers import player_manager
+from managers import player_manager, cursor_manager
+from managers.cursor_manager import Cursor
+from managers.player import Player
 from utils import log
 
 
@@ -14,14 +17,20 @@ def draw_player_bars(screen, bar_width):
     pygame.draw.rect(screen, RED_COLOR, pygame.Rect(SCREEN_WIDTH - bar_width, 0, bar_width, SCREEN_HEIGHT))
 
 
-def draw_decks(screen, blue_player, red_player, card_images, start_y, y_offset):
+def draw_decks(screen, blue_player: Player, red_player: Player, card_images, deck_indexes: tuple, start_y, y_offset):
     for i in range(4):
         y = start_y + i * y_offset
         blue_card = card_images.get(blue_player.hand[i])
         red_card = card_images.get(red_player.hand[i])
 
-        # BLUE (50,y)
-        # RED (SCREEN_WIDTH - 175, y)
+        if i == deck_indexes[0] and not blue_player.cursor.placing:
+            pygame.draw.rect(screen, BLUE_COLOR, blue_card.get_rect(topleft=(50, y)).inflate(8, 8), width=4,
+                             border_radius=8)
+
+        if i == deck_indexes[1] and not red_player.cursor.placing:
+            pygame.draw.rect(screen, RED_COLOR, red_card.get_rect(topleft=(SCREEN_WIDTH - 175, y)).inflate(8, 8),
+                             width=4, border_radius=8)
+
         screen.blit(blue_card, (50, y))
         screen.blit(red_card, (SCREEN_WIDTH - 175, y))
 
@@ -33,6 +42,7 @@ def draw_elixir_bars(ui_module: UI, elixir_bar, blue_x, red_x, y_offset):
 
     bar_size = elixir_bar.get_size()
 
+    # Card selection
     pygame.draw.rect(ui_module.screen, ELIXIR_COLOR,
                      pygame.Rect(blue_x, y_offset, bar_size[0], bar_size[1] / 10 * blue_elixir))
     pygame.draw.rect(ui_module.screen, ELIXIR_COLOR,
@@ -47,20 +57,16 @@ def draw_elixir_bars(ui_module: UI, elixir_bar, blue_x, red_x, y_offset):
     screen.blit(elixir_bar, (red_x, y_offset))  # Red elixir bar
 
 
-def draw_cursors(ui_module: UI):
-    red_cursor = cursor.get_cursor("rouge")
-    bleu_cursor = cursor.get_cursor("bleu")
-
-    if red_cursor is None or bleu_cursor is None:
-        log.logger.send("Tried drawing non-existent cursor. Please make sure to initialize them first.", logging.ERROR)
-        return
-
+def draw_cursors(screen: pygame.Surface, cursor_sprites: tuple, cursors: tuple):
+    blue_cursor = cursors[0]
+    red_cursor = cursors[1]
+    
     if red_cursor.placing:
-        ui_module.screen.blit(GUI_PATH / "red_cursor.png", red_cursor.pos)
-    if bleu_cursor.placing:
-        ui_module.screen.blit(GUI_PATH / "blue_cursor.png", bleu_cursor.pos)
+        screen.blit(cursor_sprites[1], (SCREEN_WIDTH / 2 + red_cursor.pos[0], SCREEN_HEIGHT / 2 + red_cursor.pos[1]))
+    if blue_cursor.placing:
+        screen.blit(cursor_sprites[0], (SCREEN_WIDTH / 2 + blue_cursor.pos[0], SCREEN_HEIGHT / 2 + blue_cursor.pos[1]))
 
 
 def taunt(screen, sound_module: Sound, camp):
     sound_module.play_sound(GUI_SOUNDS_PATH / "taunt.wav", 0.4)
-    # TODO: taunt blit
+    # TODO: Show taunt sprite

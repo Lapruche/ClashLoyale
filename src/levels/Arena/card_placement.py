@@ -1,27 +1,21 @@
-from constant import GUI_SOUNDS_PATH
-from managers import cursor_manager
+from constant import GUI_SOUNDS_PATH, TRACE
 from managers.player import Player
-from utils.binding_states import bind_default_actions
+from utils import log
 
 
-class CardPlacementHandler:
-    def __init__(self, modules):
-        self.modules = modules
-        self.input = modules["input"]
-        self.sound = modules["sound"]
+def place(modules: dict, bindings_helper, player: Player):
+    sound = modules["sound"]
+    cursor = player.cursor
 
-    def start_placing(self, player, card_index):
-        cursor = cursor_manager.get_cursor(player.camp)
-        if cursor is None:
-            return
-
+    if not cursor.placing:
         cursor.placing = True
-        cursor.card_index = card_index  # Saves the card index for later use
-
-        self.sound.play_sound(GUI_SOUNDS_PATH / "elixir.wav", 0.3)
-
+        bindings_helper.bind_placing_actions(player)
+        log.logger.send(f"Player {player.camp} started placing.", TRACE)
+    else:
+        player.play_card(sound, cursor.card_index, cursor.pos)
+        sound.play_sound(GUI_SOUNDS_PATH / "elixir.wav", 0.3)
+        cursor.placing = False
         
-    def confirm_placement(self, player: Player, cursor):
-        card = player.play_card(self.sound, cursor)
+        bindings_helper.bind_ingame_actions(player)
         
-        bind_default_actions(player.cursor, self.modules)
+        log.logger.send(f"Player {player.camp} placed a card.", TRACE)

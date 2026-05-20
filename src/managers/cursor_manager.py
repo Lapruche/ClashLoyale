@@ -9,28 +9,28 @@ cursors = []
 class Cursor:
     def __init__(self, camp) -> None:
         self.camp = camp
-        self.pos = (0, 0)
+        self.pos = [0, 0]
         self.placing = False
         self.card_index = 0
 
     def move(self, direction: str):
-        if direction == "left":
-            self.pos[0] -= 1
-        if direction == "right":
-            self.pos[0] += 1
-        if direction == "up":
-            self.pos[1] -= 1
-        if direction == "down":
-            self.pos[1] += 1
+        if self.placing:
+            if direction == "left":
+                self.pos[0] -= 3
+            if direction == "right":
+                self.pos[0] += 3
+            if direction == "up":
+                self.pos[1] -= 3
+            if direction == "down":
+                self.pos[1] += 3
+        else:
+            if direction == "up":
+                self.card_index = (self.card_index - 1) % 4
+            elif direction == "down":
+                self.card_index = (self.card_index + 1) % 4
 
-    def confirm(self, sound_module: Sound, card_index: int) -> None:
-        plr = player_manager.get_player(self.camp)
-        if plr is None:
-            return None
-
-        plr.play_card(sound_module, card_index)
-        self.placing = False
-        return None
+            if self.card_index >= 5:
+                self.card_index = 0
 
 
 def get_cursor(camp) -> Cursor | None:

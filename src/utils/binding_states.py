@@ -1,33 +1,49 @@
-from typing import Callable
-
-from core.input import pass_f
+from core.input import placeholder
+from levels.Arena import card_placement
 from levels.Arena.arena_renderer import taunt
-from managers.cursor_manager import Cursor
 from managers.player import Player
 
 
-def bind_default_actions(modules: dict, start_placing_callback: Callable[[], None], player: Player) -> None:
-    player_context = player.keymap_context
-    input_module = modules["input"]
-    ui_module = modules["ui"]
-    sound_module = modules["sound"]
+class BindingsHelper:
+    def __init__(self, modules):
+        self.modules = modules
+        self.input = modules["input"]
+        self.ui = modules["ui"]
+        self.sound = modules["sound"]
 
-    input_module.bind_action(player_context, "up", pass_f)
-    input_module.bind_action(player_context, "left", pass_f)
-    input_module.bind_action(player_context, "right", pass_f)
-    input_module.bind_action(player_context, "down", pass_f)
-    input_module.bind_action(player_context, "use", start_placing_callback)
-    input_module.bind_action(player_context, "taunt", lambda: taunt(ui_module.screen, sound_module, player.camp))
+    def bind_default_actions(self, player: Player) -> None:
+        """
+        Sets all binds to placeholder actions (practically, it just unbinds them).
+        :param player: Player to bind actions to
+        """
 
+        self.input.bind_action(player.keymap_context, "up", placeholder)
+        self.input.bind_action(player.keymap_context, "left", placeholder)
+        self.input.bind_action(player.keymap_context, "right", placeholder)
+        self.input.bind_action(player.keymap_context, "down", placeholder)
+        self.input.bind_action(player.keymap_context, "use", placeholder)
+        self.input.bind_action(player.keymap_context, "taunt", placeholder)
 
-def bind_placement_actions(confirm_placement_callback: Callable[[Player, Cursor], None], player: Player,
-                           modules: dict) -> None:
-    input_module = modules["input"]
-    ui_module = modules["ui"]
-    sound_module = modules["sound"]
+    def bind_ingame_actions(self, player: Player) -> None:
+        """
+        Sets all binds to in-game actions.
+        :param player: Player to bind actions to
+        """
 
-    input_module.bind_action(player.keymap_context, "up", lambda: player.cursor.move("up"))
-    input_module.bind_action(player.keymap_context, "left", lambda: player.cursor.move("left"))
-    input_module.bind_action(player.keymap_context, "right", lambda: player.cursor.move("right"))
-    input_module.bind_action(player.keymap_context, "down", lambda: player.cursor.move("down"))
-    input_module.bind_action(player.keymap_context, "use", confirm_placement_callback)
+        self.input.bind_action(player.keymap_context, "up", lambda: player.cursor.move("up"))
+        self.input.bind_action(player.keymap_context, "left", lambda: player.cursor.move("left"))
+        self.input.bind_action(player.keymap_context, "right", lambda: player.cursor.move("right"))
+        self.input.bind_action(player.keymap_context, "down", lambda: player.cursor.move("down"))
+        self.input.bind_action(player.keymap_context, "use", lambda: card_placement.place(self.modules, self, player))
+        self.input.bind_action(player.keymap_context, "taunt", lambda: taunt(self.ui.screen, self.sound, player.camp))
+
+    def bind_placing_actions(self, player: Player) -> None:
+        """
+        Sets all binds to in-game placing actions.
+        :param player: Player to bind actions to
+        """
+
+        self.input.bind_action(player.keymap_context, "up", lambda: player.cursor.move("up"), continuous=True)
+        self.input.bind_action(player.keymap_context, "left", lambda: player.cursor.move("left"), continuous=True)
+        self.input.bind_action(player.keymap_context, "right", lambda: player.cursor.move("right"), continuous=True)
+        self.input.bind_action(player.keymap_context, "down", lambda: player.cursor.move("down"), continuous=True)

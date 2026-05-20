@@ -8,7 +8,7 @@ from utils import log
 players: list[Player] = []
 
 
-def add_player(keymap_context: str, cursor: Cursor, camp, deck, elixir_start):
+def add_player(keymap_context: str, cursor: Cursor, camp: str, deck: list, elixir_start: int) -> Player | None:
     if len(players) >= MAX_PLAYER_COUNT:
         log.logger.send("Cannot add player, reached max player count.", logging.ERROR)
         return None
