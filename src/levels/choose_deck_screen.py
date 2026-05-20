@@ -5,12 +5,14 @@ import logging
 
 from core.state import GameState
 from utils import tracked_surface
+from utils.drawing import scale_surface
 from core import asset
 from utils import log
 from levels.widgets.button_widget import ButtonWidget
 from levels.scene import Scene
-current=0 #  0 = au joueur bleu de choisir , 1 = au joueur rouge de choisir
 
+
+current=0 #  0 = au joueur bleu de choisir , 1 = au joueur rouge de choisir
 deck_blue_selection=[]
 deck_red_selection=[]
 
@@ -30,10 +32,9 @@ class ChooseDeckScreen(Scene):
 
         for file in os.listdir(constant.CARDS_PATH):
             if file.endswith(".png"):
-                image = asset.get_image(constant.CARDS_PATH / file).convert_alpha()
-                image = pygame.transform.scale(image, (constant.SCREEN_WIDTH / 10.5, constant.SCREEN_HEIGHT / 9))
-                self.cartes.append(tracked_surface.TrackedSurface(file,image))
-    
+                card = asset.get_image(constant.CARDS_PATH / file).convert_alpha()
+                card = scale_surface(card, 10.5, 9)
+                self.cartes.append(tracked_surface.TrackedSurface(file, card))
 
     def start(self):
         super().start()
