@@ -1,7 +1,7 @@
 {
   "name": "mini_pekka",
   "elixir_cost": 4,
-  "pv": 800,
+  "pv": 1000,
   "damage": 400,
   "freq_atk": 2,
   "speed": 2,
