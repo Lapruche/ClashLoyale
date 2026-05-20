@@ -1,8 +1,12 @@
 import logging
 
-from managers.Unit.game_unit import GameUnit
-from managers.Unit.unit import get_definition
+import pygame
+
+from managers.Unit import unit_dict
+from managers.Unit.unit_utils import get_definition
+from managers.Unit.units.knight import Knight
 from utils import log
+from utils.drawing import scale_unit
 
 
 class UnitManager:
@@ -17,20 +21,29 @@ class UnitManager:
             log.logger.send(f"No definition for unit {unit_name} found.", logging.ERROR)
             return
 
-        unit = GameUnit(camp, self.next_id, definitions, pos)
+        unit_class = unit_dict.UNITS_DICT.get(unit_name, Knight)
+        unit = unit_class(self.next_id, camp, definitions, pos)
         self.units.append(unit)
         unit.on_spawn()
 
-        log.logger.send("Added unit to board.", logging.DEBUG)
+        self.next_id += 1  # Increments id for next unit to prevent duplicates
 
-    def draw(self):
+        log.logger.send(f"Added {unit_name} to board.", logging.DEBUG)
+
+    def draw(self, screen: pygame.Surface):
         for unit in self.units:
-            pass  # TODO
+            sprite = scale_unit(unit.current_sprite, (3, 3))
+            if sprite is None:
+                log.logger.send(f"Unit {unit.name}:{unit.id} has no sprite and cannot be drawn.", logging.ERROR)
+                continue
 
-    def tick(self):
+            screen.blit(sprite, sprite.get_rect(center=(unit.pos[0], unit.pos[1])))
+
+    def tick(self, dt):
         # Health check
 
         for unit in self.units:
+            unit.update(dt, [e for e in self.units if e.camp != unit.camp])
             if unit.health <= 0:
                 unit.on_death()
                 self.units.remove(unit)

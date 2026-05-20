@@ -37,5 +37,5 @@ class MainMenu(Scene):
 
         self.sound.play_sound("deck.mp3", 0.75, 2500, True)
 
-    def run(self):
-        super().run()
+    def run(self, dt=0):
+        super().run(dt)

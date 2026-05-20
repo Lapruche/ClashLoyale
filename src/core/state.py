@@ -20,8 +20,8 @@ class StateManager:
         self.state = initial_state
         self.screens = screens or {}
 
-    def run_screen(self):
-        return self.screens[self.state].run()
+    def run_screen(self, dt=0):
+        return self.screens[self.state].run(dt)
 
     def get_state(self):
         return self.state

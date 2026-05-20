@@ -1,10 +1,10 @@
 from pathlib import Path
+
 import pygame
 
 from constant import SPRITES_PATH
 from core import asset
 from core.animation import Animation
-
 from levels.scene import Scene
 from levels.widgets.image_widget import ImageWidget
 from levels.widgets.text_widget import TextWidget
@@ -53,7 +53,7 @@ class TestScreen(Scene):
         self.knight_widget = ImageWidget(
             self.modules,
             (400, 300),
-            self.run_animation.get_image(),
+            self.run_animation.current_sprite(),
             id="KnightAnim"
         )
 
@@ -61,12 +61,8 @@ class TestScreen(Scene):
 
         self.clock = pygame.time.Clock()
 
-    def run(self):
-        super().run()
-
-
-        dt = self.clock.tick(60) / 1000
-
+    def run(self, dt=0):
+        super().run(dt)
         self.run_animation.update(dt)
 
-        self.knight_widget.image = self.run_animation.get_image()
+        self.knight_widget.image = self.run_animation.current_sprite()

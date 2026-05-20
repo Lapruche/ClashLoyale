@@ -78,8 +78,8 @@ class ChooseDeckScreen(Scene):
     def _is_deck_full(self):
         return len(deck_blue_selection) == 8
 
-    def run(self):
-        super().run()
+    def run(self, dt=0):
+        super().run(dt)
 
     def ajout_carte(self, widget):
         if current == 0:

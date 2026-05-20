@@ -1,0 +1,20 @@
+{
+  "name": "wall_breaker",
+  "elixir_cost": 2,
+  "pv": 330,
+  "damage": 500,
+  "freq_atk": 1,
+  "speed": 3,
+  "type": "rusheur",
+  "range": 1,
+  "self_destruct": 1,
+  "nb_unit": 2,
+  "shield": "None",
+  "tower_damage": 300,
+  "target": "zone",
+  "radius": 1,
+  "spawn_unit": "None",
+  "effect": {
+    "recoil": 2
+  }
+}

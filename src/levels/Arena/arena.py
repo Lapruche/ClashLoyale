@@ -8,6 +8,7 @@ from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixi
 from levels.scene import Scene
 from managers import cursor_manager
 from managers.Player import player_manager
+from managers.Unit.unit_manager import UnitManager
 from utils import log
 from utils.binding_states import BindingsHelper
 from utils.drawing import scale_surface
@@ -47,7 +48,9 @@ class Arena(Scene):
 
         self.blue_cursor = scale_surface(asset.get_image(GUI_PATH / "blue_cursor.png"), 30, 30)
         self.red_cursor = scale_surface(asset.get_image(GUI_PATH / "red_cursor.png"), 30, 30)
-        
+
+        self.unit_manager = UnitManager(self.modules)
+
         self.blue_plr = None
         self.red_plr = None
         self.card_images = None
@@ -57,11 +60,12 @@ class Arena(Scene):
 
         log.logger.send("Game started.")
 
-        test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'sapeur', 'zap', 'zappy']
-        test_blue = ['canon', 'mini_pekka', 'rage', 'fireball', 'dart_goblin', 'giant', 'hogrider', 'log']
+        test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'wall_breaker', 'zap', 'zappy']
+        test_blue = ['canon', 'mini_pekka', 'rage', 'fireball', 'dart_goblin', 'giant', 'hog_rider', 'log']
+        test_knight = ['knight', 'knight', 'knight', 'knight', 'knight', 'knight', 'knight', 'knight']
 
         cursor_manager.init_arena_cursors()
-        bindings_helper = BindingsHelper(self.modules)
+        bindings_helper = BindingsHelper(self.modules, self.unit_manager)
 
         # Setup player cursors
         blue_cursor = cursor_manager.get_cursor("bleu")
@@ -71,8 +75,8 @@ class Arena(Scene):
             raise AttributeError("Could not get player cursors, something went very wrong !")
 
         # Setup players
-        self.blue_plr = player_manager.add_player("player_1", blue_cursor, "bleu", test_blue, START_ELIXIR)
-        self.red_plr = player_manager.add_player("player_2", red_cursor, "rouge", test_red, START_ELIXIR)
+        self.blue_plr = player_manager.add_player("player_1", blue_cursor, "bleu", test_knight, START_ELIXIR)
+        self.red_plr = player_manager.add_player("player_2", red_cursor, "rouge", test_knight, START_ELIXIR)
 
         if self.blue_plr is None or self.red_plr is None:
             raise AttributeError("Could not add players, something went very wrong !")
@@ -88,13 +92,23 @@ class Arena(Scene):
         bindings_helper.bind_ingame_actions(self.blue_plr)
         bindings_helper.bind_ingame_actions(self.red_plr)
 
-    def run(self) -> None:
-        super().run()
+        # Spawn towers
+        """self.unit_manager.spawn_unit("king_tower", "bleu", (500, 915))
+        self.unit_manager.spawn_unit("princess_tower", "bleu", (340, 860)) # Left
+        self.unit_manager.spawn_unit("princess_tower", "bleu", (660, 860)) # Right
+        
+        self.unit_manager.spawn_unit("king_tower", "rouge", (500, 125))
+        self.unit_manager.spawn_unit("princess_tower", "rouge", (340, 175)) # Left
+        self.unit_manager.spawn_unit("princess_tower", "rouge", (660, 175)) # Right"""
+
+    def run(self, dt=0) -> None:
+        super().run(dt)
+        self.unit_manager.tick(dt)
 
         player_deck_indexes = (self.blue_plr.cursor.card_index, self.red_plr.cursor.card_index)
 
         self.ui.screen.blit(self.arena, self.arena_pos)
-        
+
         draw_player_bars(self.ui.screen, 15)
         draw_decks(self.ui.screen, self.blue_plr, self.red_plr, self.card_images, player_deck_indexes, 150, 175)
         draw_elixir_bars(self.ui,
@@ -103,4 +117,7 @@ class Arena(Scene):
                          SCREEN_WIDTH / 2 + self.arena_size[0] / 2 + 20,
                          SCREEN_HEIGHT / 2 - self.elixir_bar_size[1] / 2
                          )
+
+        self.unit_manager.draw(self.ui.screen)
+        
         draw_cursors(self.ui.screen, (self.blue_cursor, self.red_cursor), (self.blue_plr.cursor, self.red_plr.cursor))

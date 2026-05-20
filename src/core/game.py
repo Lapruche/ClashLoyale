@@ -46,7 +46,7 @@ class Game:
     def tick(self, events: list[Event], dt):
         self.modules["input"].process(events)
         self.modules["ui"].handle_events(events)
-        self.modules["state"].run_screen()
+        self.modules["state"].run_screen(dt)
         self.modules["ui"].render()
 
         for event in events:

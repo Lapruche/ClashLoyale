@@ -41,7 +41,7 @@ class Scene(ABC):
         self.draw_background()
 
     @abstractmethod
-    def run(self) -> None:
+    def run(self, dt=0) -> None:
         """
         Runs every frame upon scene activation
         """
