@@ -8,6 +8,7 @@ import constant
 from core.game import Game
 from core.scaling import auto_scaling
 from utils import log
+from managers import round_manager
 
 
 def run():

@@ -13,8 +13,11 @@ from levels.arena import Arena
 from levels.choose_deck_screen import ChooseDeckScreen
 from levels.main_menu import MainMenu
 from levels.test_screen import TestScreen
+import managers.round_manager
+from managers import round_manager
 from units.unit import Unit
 from utils import log
+
 
 
 class Game:
@@ -55,12 +58,20 @@ class Game:
 
         log.logger.send("Initialized game")
         self.modules["state"].set_state(GameState.MENU)
+        round_manager.add_round(175)
+        round_manager.add_round(125)
+
 
     def tick(self, events: list[Event], dt):
         self.modules["input"].process(events)
         self.modules["ui"].handle_events(events)
         self.modules["state"].run_screen()
         self.modules["ui"].render()
+        if round_manager.active_round is not None:
+            round_manager.active_round.timer_tick(dt)
+
+
+
 
         for event in events:
             if event.type == pygame.QUIT:
