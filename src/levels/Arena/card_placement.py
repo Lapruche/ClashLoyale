@@ -1,5 +1,5 @@
 from constant import GUI_SOUNDS_PATH, TRACE
-from managers.player import Player
+from managers.Player.player import Player
 from utils import log
 
 

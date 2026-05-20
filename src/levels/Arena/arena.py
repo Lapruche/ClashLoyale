@@ -6,7 +6,8 @@ from constant import GUI_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH, TRACE,
 from core import asset
 from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars, draw_cursors
 from levels.scene import Scene
-from managers import player_manager, cursor_manager
+from managers import cursor_manager
+from managers.Player import player_manager
 from utils import log
 from utils.binding_states import BindingsHelper
 from utils.drawing import scale_surface

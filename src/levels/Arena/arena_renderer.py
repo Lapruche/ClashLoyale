@@ -1,15 +1,10 @@
-import logging
-from typing import Self
-
 import pygame
 
-from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH, GUI_PATH
+from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH
 from core.sound import Sound
 from core.ui import UI
-from managers import player_manager, cursor_manager
-from managers.cursor_manager import Cursor
-from managers.player import Player
-from utils import log
+from managers.Player import player_manager
+from managers.Player.player import Player
 
 
 def draw_player_bars(screen, bar_width):

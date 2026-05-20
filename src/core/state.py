@@ -1,5 +1,8 @@
 from enum import IntEnum
 
+from constant import TRACE
+from utils import log
+
 
 class GameState(IntEnum):
     STARTING = 0
@@ -25,4 +28,5 @@ class StateManager:
 
     def set_state(self, new_state):
         self.state = new_state
+        log.logger.send(f"Set new state {new_state}", TRACE)
         return self.screens[self.state].start()

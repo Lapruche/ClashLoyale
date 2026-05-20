@@ -1,7 +1,5 @@
 # Prototype by draco1661 <draco1661@proton.me>
-
-from core.sound import Sound
-from managers import player_manager
+from constant import CURSOR_SPEED
 
 cursors = []
 
@@ -16,13 +14,13 @@ class Cursor:
     def move(self, direction: str):
         if self.placing:
             if direction == "left":
-                self.pos[0] -= 3
+                self.pos[0] -= CURSOR_SPEED
             if direction == "right":
-                self.pos[0] += 3
+                self.pos[0] += CURSOR_SPEED
             if direction == "up":
-                self.pos[1] -= 3
+                self.pos[1] -= CURSOR_SPEED
             if direction == "down":
-                self.pos[1] += 3
+                self.pos[1] += CURSOR_SPEED
         else:
             if direction == "up":
                 self.card_index = (self.card_index - 1) % 4

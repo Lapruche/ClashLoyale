@@ -1,8 +1,8 @@
 import logging
 
 from constant import DECK_LENGTH, MAX_PLAYER_COUNT
+from managers.Player.player import Player
 from managers.cursor_manager import Cursor
-from managers.player import Player
 from utils import log
 
 players: list[Player] = []

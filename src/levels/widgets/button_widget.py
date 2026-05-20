@@ -8,7 +8,7 @@ from utils import tracked_surface
 class ButtonWidget:
     def __init__(self, modules: dict, pos: tuple, image: pygame.Surface | tracked_surface.TrackedSurface,
                  action: Callable[[Any], None], id: str | None = None):
-        # Module definitions
+        # Module unit_definitions
         self.screen = modules["ui"].screen
         self.input = modules["input"]
 

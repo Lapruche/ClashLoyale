@@ -1,7 +1,7 @@
 from core.input import placeholder
 from levels.Arena import card_placement
 from levels.Arena.arena_renderer import taunt
-from managers.player import Player
+from managers.Player.player import Player
 
 
 class BindingsHelper:
