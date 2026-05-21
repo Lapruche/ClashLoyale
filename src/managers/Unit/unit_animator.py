@@ -14,7 +14,7 @@ class UnitAnimator:
 
     def play(self, name: str, force_check: bool = False):
         if name not in self._animations:
-            log.logger.send("Tried to play an unavailable animation", logging.ERROR)
+            log.logger.send("Tried to play an unavailable animation", logging.WARNING)
             return
 
         if name is not self._current_animation or force_check:

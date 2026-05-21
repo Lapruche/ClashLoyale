@@ -1,8 +1,9 @@
 import pygame
 
-from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH
+from constant import BLUE_COLOR, RED_COLOR, SCREEN_WIDTH, SCREEN_HEIGHT, ELIXIR_COLOR, GUI_SOUNDS_PATH, TEXT_COLOR
 from core.sound import Sound
 from core.ui import UI
+from managers import round_manager
 from managers.Player import player_manager
 from managers.Player.player import Player
 
@@ -61,6 +62,11 @@ def draw_cursors(screen: pygame.Surface, cursor_sprites: tuple, cursors: tuple):
     if blue_cursor.placing:
         screen.blit(cursor_sprites[0], (SCREEN_WIDTH / 2 + blue_cursor.pos[0], SCREEN_HEIGHT / 2 + blue_cursor.pos[1]))
 
+
+def draw_timer(ui_module: UI):
+    time = round_manager.active_round.time
+    font_render = ui_module.font_medium.render(f"{time[0]}:{time[1]}", True, TEXT_COLOR)
+    ui_module.screen.blit(font_render, (65, 50))
 
 def taunt(screen, sound_module: Sound, camp):
     sound_module.play_sound(GUI_SOUNDS_PATH / "taunt.wav", 0.4)

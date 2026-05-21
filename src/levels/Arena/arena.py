@@ -4,14 +4,14 @@ import pygame
 
 from constant import GUI_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITES_PATH, TRACE, START_ELIXIR
 from core import asset
-from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars, draw_cursors
+from levels.Arena.arena_renderer import draw_player_bars, draw_decks, draw_elixir_bars, draw_cursors, draw_timer
 from levels.scene import Scene
-from managers import cursor_manager
+from managers import cursor_manager, round_manager
 from managers.Player import player_manager
 from managers.Unit.unit_manager import UnitManager
 from utils import log
 from utils.binding_states import BindingsHelper
-from utils.drawing import scale_surface
+from utils.drawing import scale_by_screen
 
 
 def load_card_images(cards: Collection[str]) -> dict[Any, Any]:
@@ -20,7 +20,7 @@ def load_card_images(cards: Collection[str]) -> dict[Any, Any]:
     for card in cards:
         card_img = asset.get_image_stem(card)
         if card_img:
-            images[card] = scale_surface(card_img, 8, 6.5)
+            images[card] = scale_by_screen(card_img, 8, 6.5)
 
     log.logger.send(f"Loaded and scaled {len(cards)} card images.", TRACE)
     return images
@@ -46,10 +46,11 @@ class Arena(Scene):
         self.elixir_bar = asset.get_image(GUI_PATH / "elixir_bar.png")
         self.elixir_bar_size = self.elixir_bar.get_size()
 
-        self.blue_cursor = scale_surface(asset.get_image(GUI_PATH / "blue_cursor.png"), 30, 30)
-        self.red_cursor = scale_surface(asset.get_image(GUI_PATH / "red_cursor.png"), 30, 30)
+        self.blue_cursor = scale_by_screen(asset.get_image(GUI_PATH / "blue_cursor.png"), 30, 30)
+        self.red_cursor = scale_by_screen(asset.get_image(GUI_PATH / "red_cursor.png"), 30, 30)
 
-        self.unit_manager = UnitManager(self.modules)
+        self.unit_manager = UnitManager(self.modules, (0, 0))
+        self.unit_manager.init_hpbar_sprites()
 
         self.blue_plr = None
         self.red_plr = None
@@ -57,8 +58,7 @@ class Arena(Scene):
 
     def start(self) -> None:
         super().start()
-
-        log.logger.send("Game started.")
+        round_manager.add_round(175)
 
         test_red = ['tasty_crousty', 'x_bow', 'knight', 'pekka', 'prince', 'wall_breaker', 'zap', 'zappy']
         test_blue = ['canon', 'mini_pekka', 'rage', 'fireball', 'dart_goblin', 'giant', 'hog_rider', 'log']
@@ -86,20 +86,23 @@ class Arena(Scene):
         self.card_images = load_card_images(cards)
 
         self.sound.clear_sounds()  # Prevents overlapping soundtracks
-        self.sound.play_sound("combat.mp3", 0.75, 2500, True)
+        self.sound.play_sound("combat.mp3", 0.5, 2500, True)
 
         # Binds player inputs
         bindings_helper.bind_ingame_actions(self.blue_plr)
         bindings_helper.bind_ingame_actions(self.red_plr)
 
+        log.logger.send("Game started.")
+
         # Spawn towers
-        """self.unit_manager.spawn_unit("king_tower", "bleu", (500, 915))
-        self.unit_manager.spawn_unit("princess_tower", "bleu", (340, 860)) # Left
-        self.unit_manager.spawn_unit("princess_tower", "bleu", (660, 860)) # Right
-        
+        self.unit_manager.spawn_unit("king_tower", "bleu", (500, 915))
         self.unit_manager.spawn_unit("king_tower", "rouge", (500, 125))
-        self.unit_manager.spawn_unit("princess_tower", "rouge", (340, 175)) # Left
-        self.unit_manager.spawn_unit("princess_tower", "rouge", (660, 175)) # Right"""
+
+        self.unit_manager.spawn_unit("princess_tower", "bleu", (340, 860))  # Left
+        self.unit_manager.spawn_unit("princess_tower", "bleu", (660, 860))  # Right
+
+        self.unit_manager.spawn_unit("princess_tower", "rouge", (340, 175))  # Left
+        self.unit_manager.spawn_unit("princess_tower", "rouge", (660, 175))  # Right
 
     def run(self, dt=0) -> None:
         super().run(dt)
@@ -111,6 +114,7 @@ class Arena(Scene):
 
         draw_player_bars(self.ui.screen, 15)
         draw_decks(self.ui.screen, self.blue_plr, self.red_plr, self.card_images, player_deck_indexes, 150, 175)
+        draw_timer(self.ui)
         draw_elixir_bars(self.ui,
                          self.elixir_bar,
                          SCREEN_WIDTH / 2 - self.arena_size[0] / 2 - 40,
@@ -119,5 +123,5 @@ class Arena(Scene):
                          )
 
         self.unit_manager.draw(self.ui.screen)
-        
+
         draw_cursors(self.ui.screen, (self.blue_cursor, self.red_cursor), (self.blue_plr.cursor, self.red_plr.cursor))

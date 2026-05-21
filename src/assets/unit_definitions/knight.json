@@ -6,7 +6,7 @@
   "freq_atk": 1.5,
   "speed": 1.5,
   "type": "unit",
-  "range": 1,
+  "range": 1.5,
   "self_destruct": 0,
   "nb_unit": 1,
   "shield": "None",

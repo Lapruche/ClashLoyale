@@ -3,7 +3,7 @@
   "elixir_cost": 0,
   "pv": 7000,
   "damage": 140,
-  "freq_atk": 2,
+  "freq_atk": 1,
   "speed":"None",
   "type": "infra",
   "range":10,

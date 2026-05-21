@@ -9,6 +9,7 @@ from levels.Arena.arena import Arena
 from levels.choose_deck_screen import ChooseDeckScreen
 from levels.main_menu import MainMenu
 from levels.test_screen import TestScreen
+from managers import round_manager
 from utils import log
 
 
@@ -48,6 +49,9 @@ class Game:
         self.modules["ui"].handle_events(events)
         self.modules["state"].run_screen(dt)
         self.modules["ui"].render()
+
+        if round_manager.active_round is not None:
+            round_manager.active_round.timer_tick(dt)
 
         for event in events:
             if event.type == pygame.QUIT:

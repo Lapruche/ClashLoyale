@@ -1,5 +1,9 @@
+from core.sound import Sound
+
+
 class UnitAbility:
-    def __init__(self, name: str, cooldown: float):
+    def __init__(self, sound_module: Sound, name: str, cooldown: float):
+        self.sound_module = sound_module
         self.name: str = name
         self.cooldown: float = cooldown
         self._timer: float = cooldown

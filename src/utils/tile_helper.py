@@ -1,4 +1,4 @@
-TILE_SIZE = 55
+from constant import TILE_SIZE
 
 
 def pixel_to_tile(amount) -> int:
