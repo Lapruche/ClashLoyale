@@ -5,7 +5,7 @@ import pygame
 from constant import SPRITES_PATH, HP_BAR_SCALE, HP_BAR_OFFSET
 from core import asset
 from managers.Unit import unit_dict
-from managers.Unit.unit_utils import get_definition
+from managers.Unit.unit_utils import get_properties
 from managers.Unit.units.knight import Knight
 from utils import log
 from utils.drawing import scale_by_size
@@ -33,7 +33,7 @@ class UnitManager:
         return [scale_by_size(asset.get_image(sprite), HP_BAR_SCALE) for sprite in sprites]
 
     def spawn_unit(self, unit_name: str, camp: str, pos: tuple):
-        definitions = get_definition(unit_name)
+        definitions = get_properties(unit_name)
         if definitions is None:
             log.logger.send(f"No definition for unit {unit_name} found.", logging.ERROR)
             return
@@ -79,4 +79,4 @@ class UnitManager:
             if unit.health <= 0:
                 unit.on_death()
                 self.units.remove(unit)
-                log.logger.send(f"Removing unit {unit.id} from board as he died.", logging.DEBUG)
+                log.logger.send(f"Removing unit {unit.name}:{unit.id} from board as it died.", logging.DEBUG)

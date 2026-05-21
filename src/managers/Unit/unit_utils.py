@@ -7,7 +7,7 @@ from constant import DEFINITIONS_PATH
 from utils import log
 
 
-def get_definition(unit_name: str):
+def get_properties(unit_name: str):
     list_files = os.listdir(DEFINITIONS_PATH)
 
     for file in list_files:
