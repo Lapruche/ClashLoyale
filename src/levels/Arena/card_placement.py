@@ -1,6 +1,9 @@
+import logging
+
 from constant import SCREEN_HEIGHT, SCREEN_WIDTH, TRACE
 from managers.Player.player import Player
 from managers.Unit.unit_manager import UnitManager
+from managers.Unit.unit_utils import get_properties
 from utils import log
 
 
@@ -20,7 +23,13 @@ def place(modules: dict, bindings_helper, unit_manager: UnitManager, player: Pla
         unit_name = player.hand[cursor.card_index]
         unit_pos = (SCREEN_WIDTH / 2 + cursor.pos[0], SCREEN_HEIGHT / 2 + cursor.pos[1])
 
+        elixir_cost = get_properties(unit_name)["elixir_cost"]
+        if player.elixir < elixir_cost:
+            log.logger.send(f"Player {player.camp} Tried playing {unit_name} without necessary elixir.", logging.DEBUG)
+            return
+
+        player.modify_elixir(-elixir_cost)
         unit_manager.spawn_unit(unit_name, player.camp, unit_pos)
-        player.play_card(sound, cursor.card_index, unit_pos)
-        
+        player.play_card(sound, cursor.card_index)
+
         log.logger.send(f"Player {player.camp} placed a card.", TRACE)
