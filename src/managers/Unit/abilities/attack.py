@@ -21,4 +21,3 @@ class Attack(UnitAbility):
                 self.sound_module.play_sound(self.sfx)
                 
             self._timer = self.cooldown  # Resets the cooldown
-            print(f"{caster.id} hit {target.id} with {self.damage} damage")
