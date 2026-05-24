@@ -4,15 +4,13 @@ import traceback
 
 import pygame
 
-import constant
 from core.game import Game
 from core.scaling import auto_scaling
 from utils import log
-from managers import round_manager
 
 
 def run():
-    log.Logger('debug.log', constant.TRACE)  # Will directly populate the logger variable
+    log.Logger('debug.log', logging.DEBUG)  # Will directly populate the logger variable
 
     # Pygame init
     pygame.init()
