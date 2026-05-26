@@ -9,7 +9,7 @@ from levels.widgets.text_widget import TextWidget
 class ButtonWithTipWidget:
     def __init__(self, modules: dict, text: str, font: pygame.font.Font, pos: tuple, image: pygame.Surface,
                  action: Callable[[Any], None], text_color: tuple = (255, 255, 255), id: str | None = None):
-        # Module definitions
+        # Module unit_definitions
         self.ui = modules["ui"]
         self.screen = self.ui.screen
         self.input = modules["input"]

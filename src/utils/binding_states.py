@@ -1,12 +1,14 @@
 from core.input import placeholder
 from levels.Arena import card_placement
 from levels.Arena.arena_renderer import taunt
-from managers.player import Player
+from managers.Player.player import Player
+from managers.Unit.unit_manager import UnitManager
 
 
 class BindingsHelper:
-    def __init__(self, modules):
+    def __init__(self, modules, unit_manager: UnitManager) -> None:
         self.modules = modules
+        self.unit_manager = unit_manager
         self.input = modules["input"]
         self.ui = modules["ui"]
         self.sound = modules["sound"]
@@ -34,7 +36,8 @@ class BindingsHelper:
         self.input.bind_action(player.keymap_context, "left", lambda: player.cursor.move("left"))
         self.input.bind_action(player.keymap_context, "right", lambda: player.cursor.move("right"))
         self.input.bind_action(player.keymap_context, "down", lambda: player.cursor.move("down"))
-        self.input.bind_action(player.keymap_context, "use", lambda: card_placement.place(self.modules, self, player))
+        self.input.bind_action(player.keymap_context, "use",
+                               lambda: card_placement.place(self.modules, self, self.unit_manager, player))
         self.input.bind_action(player.keymap_context, "taunt", lambda: taunt(self.ui.screen, self.sound, player.camp))
 
     def bind_placing_actions(self, player: Player) -> None:

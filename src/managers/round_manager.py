@@ -17,9 +17,10 @@ class Round:
         elif 0 < self.duree < 0.1:
             self.end_round()
 
-    def convert_seconds_to_minutes(self):
+    @property
+    def time(self):
         minutes, seconds = divmod(self.duree, 60)
-        return minutes, seconds
+        return int(minutes), int(seconds)
 
     def end_round(self):
         log.logger.send("round is finished", logging.INFO)
@@ -32,4 +33,3 @@ active_round: Round = None
 def add_round(duree):
     global active_round
     active_round = Round(duree)
-    print(active_round)

@@ -1,5 +1,3 @@
-
-
 class Animation:
     def __init__(self, frames, frame_duration, loop=True):
         self.frames = frames
@@ -30,7 +28,8 @@ class Animation:
                     self.finished = True
                     break
 
-    def get_image(self):
+    @property
+    def current_sprite(self):
         return self.frames[self.current_frame]
 
     def stop(self):
@@ -43,4 +42,3 @@ class Animation:
         self.current_frame = 0
         self.timer = 0
         self.finished = False
-

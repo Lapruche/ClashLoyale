@@ -1,10 +1,6 @@
-import logging
-import os
-
 import pygame
 from pygame.event import Event
 
-from constant import DEFINITIONS_PATH
 from core.input import Input
 from core.sound import Sound
 from core.state import StateManager, GameState
@@ -14,10 +10,10 @@ from levels.choose_deck_screen import ChooseDeckScreen
 from levels.main_menu import MainMenu
 from levels.test_screen import TestScreen
 from managers import round_manager
-from units.unit import Unit
 from utils import log
 
 
+# noinspection PyUnresolvedReferences
 class Game:
     def __init__(self):
         self.running = True
@@ -40,16 +36,7 @@ class Game:
         self.arena_scene = Arena(self.modules)
         self.modules["state"].screens[GameState.GAME] = self.arena_scene
 
-        self.registered_units = []
-
-        for definition in os.listdir(DEFINITIONS_PATH):
-            if definition.endswith(".json"):
-                unit = Unit(definition)
-                self.registered_units.append(unit)
-
-        log.logger.send(f"Registered {len(self.registered_units)} units", logging.DEBUG)
-
-        # Add screens here with state definitions
+        # Add screens here with state unit_definitions
         # Example: self.test_menu = TestMenu(self.modules, ...)
         #          self.state.screens[GameState.TEST] = self.test_menu
         # For more info on how to create a scene, see test_screen.py
@@ -60,8 +47,9 @@ class Game:
     def tick(self, events: list[Event], dt):
         self.modules["input"].process(events)
         self.modules["ui"].handle_events(events)
-        self.modules["state"].run_screen()
+        self.modules["state"].run_screen(dt)
         self.modules["ui"].render()
+
         if round_manager.active_round is not None:
             round_manager.active_round.timer_tick(dt)
 
